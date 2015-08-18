@@ -17,48 +17,13 @@ module Slackify
     end
 
     def payload
-      MultiJson.dump(
-        {
-          channel: fetch(:slack_channel),
-          username: fetch(:slack_username),
-          icon_emoji: fetch(:slack_emoji),
-          parse: fetch(:slack_parse),
-          attachments: [
-            {
-              fallback: text,
-              color: color,
-              text: text,
-              fields: [
-                {
-                  title: 'Status',
-                  value: @status,
-                  short: true
-                },
-                {
-                  title: 'Stage',
-                  value: fetch(:stage),
-                  short: true
-                },
-                {
-                  title: 'Branch',
-                  value: fetch(:branch),
-                  short: true
-                },
-                {
-                  title: 'Revision',
-                  value: fetch(:current_revision),
-                  short: true
-                },
-                {
-                  title: 'Hosts',
-                  value: fetch(:slack_hosts),
-                  short: true
-                },
-              ]
-            }
-          ]
-        }
-      )
+      MultiJson.dump({
+        channel: fetch(:slack_channel),
+        username: fetch(:slack_username),
+        parse: fetch(:slack_parse),
+        text: text,
+        color: color
+      })
     end
 
     def fetch(*args, &block)

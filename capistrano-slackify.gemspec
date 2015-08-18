@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['seenmyfate@gmail.com']
   spec.summary       = %q{Publish deployment notifications to Slack via the incoming webhooks integration}
   spec.description   = %q{Publish deployment notifications to Slack via the incoming webhooks integration}
-  spec.homepage      = 'https://github.com/onthebeach/capistrano-slackify'
+  spec.homepage      = 'https://github.com/beachyapp/capistrano-slackify'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")

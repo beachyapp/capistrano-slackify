@@ -21,8 +21,14 @@ module Slackify
         channel: fetch(:slack_channel),
         username: fetch(:slack_username),
         parse: fetch(:slack_parse),
-        text: text,
-        color: color
+        attachments: [
+          {
+            text: text,
+            fallback: text,
+            color: color,
+            title: fetch(:stage)
+          }
+        ]
       })
     end
 

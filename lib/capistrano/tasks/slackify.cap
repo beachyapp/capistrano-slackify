@@ -53,26 +53,36 @@ end
 
 namespace :load do
   task :defaults do
-    set :slack_channel, '#general'
-    set :slack_username, 'Capistrano'
-    set :slack_emoji, ':ghost:'
-    set :slack_parse, 'default'
     set :slack_user, -> { local_user.strip }
     set :slack_hosts, -> { release_roles(:all).map(&:hostname).join("\n") }
-    set :slack_url, -> { fail ':slack_url is not set' }
-    set :slack_text, lambda {
-      time_elapsed = Integer(fetch(:time_finished) - fetch(:time_started))
-      "#{fetch(:application)} deploy by #{fetch(:slack_user)}: " \
-      "successful in #{time_elapsed} seconds."
+    set :slack_channel, -> { '#beachybot-testing' }
+    set :slack_username, 'Capistrano'
+    set :repo_link, -> { "<#{fetch(:repo_http_url)}|#{fetch(:application)}>" }
+
+    set :slack_url,
+      'https://hooks.slack.com/services/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'
+
+    set :rev_link, -> {
+      "<https://github.com/beachyapp/#{fetch(:application)}/commit/#{fetch(:rev)}|#{fetch(:rev)}>"
     }
+
+    set :branch_link, -> {
+      "<https://github.com/beachyapp/#{fetch(:application)}/tree/#{fetch(:branch)}|#{fetch(:branch)}>"
+    }
+
     set :slack_deploy_starting_text, -> {
-      "#{fetch(:application)} deploy by #{fetch(:slack_user)}: " \
-      "starting."
+      "Deploying #{fetch(:repo_link)} to #{fetch(:slack_hosts)} on branch #{fetch(:branch_link)} (#{fetch(:rev_link)})"
     }
+
     set :slack_deploy_failed_text, -> {
-      "#{fetch(:application)} deploy by #{fetch(:slack_user)}: " \
-      "failed."
+      "Deploy of #{fetch(:repo_link)} to #{fetch(:slack_hosts)} on branch #{fetch(:branch_link)} (#{fetch(:rev_link)}) failed."
     }
+
+    set :slack_text, -> {
+      elapsed = Integer(fetch(:time_finished) - fetch(:time_started))
+      "Deploy of #{fetch(:repo_link)} to #{fetch(:slack_hosts)} on branch #{fetch(:branch_link)} (#{fetch(:rev_link)})  by #{fetch(:slack_user)} succeeded in #{elapsed} seconds."
+    }
+
     set :slack_deploy_starting_color, 'warning'
     set :slack_deploy_finished_color, 'good'
     set :slack_deploy_failed_color, 'danger'
